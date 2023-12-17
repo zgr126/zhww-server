@@ -4,8 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 import pool from './utils/db.mts'
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var indexRouter = require('./routes/index.mjs');
+var usersRouter = require('./routes/goods.mjs');
 import cors from 'cors'
 
 var app = express();

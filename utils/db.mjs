@@ -10,8 +10,8 @@ const connectDb = async () => {
             port: 5432,
         });
         const client = await pool.connect()
-        const res = await pool.query('SELECT * FROM user')
-        console.log(res)
+        // const res = await pool.query('SELECT * FROM user')
+        // console.log(res)
         // await pool.end()
         return client
         

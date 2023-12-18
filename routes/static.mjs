@@ -8,4 +8,5 @@ const staticRouter2 = path.join(__dirname, "public");
 console.log(staticRouter);
 router.use("/static", express.static(staticRouter));
 // router.use(express.static(staticRouter2));
+
 export default router;

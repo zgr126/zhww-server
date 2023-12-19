@@ -13,9 +13,13 @@ class goods {
 }
 
 router.get("/", async (req, res, next) => {
-  const clients = await DB.query("SELECT * FROM public.goods");
-  res.data = clients.rows;
-  next();
+  try {
+    const clients = await DB.query("SELECT * FROM public.goods");
+    res.data = clients.rows;
+    next();
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 router.post("/", async (req, res, next) => {

@@ -33,23 +33,30 @@ function generateRandomString(length) {
 const upload = multer({ storage: storage });
 router.post("/", upload.single("file"), async (req, res, next) => {
   console.log(req.file.filename);
-  const now = new Date().getTime();
-  const sql = `INSERT INTO goods(url,createTime,name) VALUES('${
-    req.file.filename
-  }',to_timestamp(${Date.now()} / 1000.0),'${req.file.originalname.slice(
-    0,
-    req.file.originalname.indexOf(".")
-  )}') RETURNING *;`;
-  console.log(sql);
-
-  try {
-    const clients = await DB.query(sql);
-    console.log(clients);
-    res.data = clients.rows;
-  } catch (err) {
-    res.err = err;
-    console.log(err);
+  const data = {
+    url: req.file.filename,
+    createTime: new Date().getTime(),
+    name:req.file.originalname.slice(0, req.file.originalname.indexOf("."))
   }
+  let err,result = await DB.collection('goods').insertOne(data)
+  res.push(result)
+  // const now = new Date().getTime();
+  // const sql = `INSERT INTO goods(url,createTime,name) VALUES('${
+  //   req.file.filename
+  // }',to_timestamp(${Date.now()} / 1000.0),'${req.file.originalname.slice(
+  //   0,
+  //   req.file.originalname.indexOf(".")
+  // )}') RETURNING *;`;
+  // console.log(sql);
+
+  // try {
+  //   const clients = await DB.query(sql);
+  //   console.log(clients);
+  //   res.data = clients.rows;
+  // } catch (err) {
+  //   res.err = err;
+  //   console.log(err);
+  // }
 
   next();
 });

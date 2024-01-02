@@ -14,8 +14,11 @@ class goods {
 
 router.get("/", async (req, res, next) => {
   try {
-    const clients = await DB.query("SELECT * FROM public.goods");
-    res.data = clients.rows;
+    
+    let err, data = await DB.collection('goods').find().toArray()
+    console.log(err)
+    console.log(data)
+    res.push(data)
     next();
   } catch (err) {
     console.log(err);
@@ -25,6 +28,8 @@ router.get("/", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   console.log(req.file);
   console.log(req.body);
+  let err, data = await DB.collection('goods').find().toArray()
+  res.push(data)
   next();
 });
 

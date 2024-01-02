@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-import pool from './utils/db.mts'
+import pool from './utils/_db.mjs'
 var indexRouter = require('./routes/index.mjs');
 var usersRouter = require('./routes/goods.mjs');
 import cors from 'cors'

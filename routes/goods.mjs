@@ -34,9 +34,10 @@ router.post("/", async (req, res, next) => {
 });
 
 router.put("/", async (req, res, next) => {
-  console.log(req.body);
+  console.log("put:", req.body);
+  let _data = req.body;
   let err,
-    data = await DB.collection("goods").updateOne();
+    data = await DB.collection("goods").replaceOne({ _id: _data._id }, _data);
   res.push(data);
   next();
 });

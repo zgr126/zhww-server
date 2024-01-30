@@ -1,1 +1,0 @@
-import{_ as t,o as e,c as _,p as a,d as o,a as c}from"./index-3c3dad4c.js";const d=s=>(a("data-v-6f2c0287"),s=s(),o(),s),p={class:"tags"},r=d(()=>c("div",{id:"routerBar"},"stag",-1)),n=[r],i={__name:"tags",setup(s){return(u,f)=>(e(),_("div",p,n))}},g=t(i,[["__scopeId","data-v-6f2c0287"]]);export{g as default};

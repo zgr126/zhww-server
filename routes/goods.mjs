@@ -17,15 +17,18 @@ router.get("/", async (req, res, next) => {
   let query = req.query.search;
   console.log(query);
   try {
-    let err,
-      data = await DB.collection("goods")
-        .find({
-          $or: [
-            { name: { $regex: new RegExp(query) } },
-            { tag: { $elemMatch: { $regex: new RegExp(query) } } },
-          ],
-        })
-        .toArray();
+    let err, data;
+    if (query) {
+      err,
+        (data = await DB.collection("goods")
+          .find({
+            $or: [{ name: { $regex: new RegExp(query) } }, { tags: query }],
+          })
+          .toArray());
+    } else {
+      err, (data = await DB.collection("goods").find().toArray());
+    }
+
     console.log(err);
     console.log(data);
     res.push(data);
@@ -37,6 +40,7 @@ router.get("/", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   console.log(req.body);
+
   let err,
     data = await DB.collection("goods").find().toArray();
   res.push(data);
@@ -45,9 +49,11 @@ router.post("/", async (req, res, next) => {
 
 router.put("/", async (req, res, next) => {
   console.log("put:", req.body);
+  let id = new ObjectId(req.body._id);
   let _data = req.body;
+  delete _data._id;
   let err,
-    data = await DB.collection("goods").replaceOne({ _id: _data._id }, _data);
+    data = await DB.collection("goods").replaceOne({ _id: id }, _data);
   res.push(data);
   next();
 });

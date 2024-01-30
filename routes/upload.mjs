@@ -22,6 +22,11 @@ const storage = multer.diskStorage({
     );
   },
 });
+const fileFilter = (req, file, callback) => {
+  // 解决中文名乱码的问题 latin1 是一种编码格式
+  file.originalname = Buffer.from(file.originalname, "latin1").toString("utf8");
+  callback(null, true);
+};
 
 function generateRandomString(length) {
   var characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"; // 可选的字符集合
@@ -30,16 +35,27 @@ function generateRandomString(length) {
     .join(""); // 根据字符集合生成指定长度的随机字符串
   return randomChars;
 }
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage, fileFilter: fileFilter });
 router.post("/", upload.single("file"), async (req, res, next) => {
-  console.log(req.file.filename);
-  const data = {
+  console.log(req.file);
+  let data = {
     url: req.file.filename,
     createTime: new Date().getTime(),
-    name:req.file.originalname.slice(0, req.file.originalname.indexOf("."))
+    name: req.file.originalname.slice(0, req.file.originalname.indexOf(".")),
+  };
+  let _data = await DB.collection("tags").find().toArray();
+  console.log("tags:", _data);
+  let tags = _data.map((e) => {
+    if (data.name.indexOf(e.tag) != -1) {
+      return e.tag;
+    }
+  });
+  if (tags.length != 0) {
+    data.tags = tags;
   }
-  let err,result = await DB.collection('goods').insertOne(data)
-  res.push(result)
+  let err,
+    result = await DB.collection("goods").insertOne(data);
+  res.push(result);
   // const now = new Date().getTime();
   // const sql = `INSERT INTO goods(url,createTime,name) VALUES('${
   //   req.file.filename
